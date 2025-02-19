@@ -15,7 +15,11 @@ class _DigitalPetAppState extends State<_DigitalPetApp> {
   String petName = "Your Pet";
   int happinessLevel = 50;
   int hungerLevel = 50;
-
+	bool isVisible = false;
+	bool notDone = true;
+	int timerCount = 0;
+	
+	final nameController = TextEditingController();
   // Function to increase happiness and update hunger when playing with the pet
   void _playWithPet() {
     setState(() {
@@ -69,6 +73,16 @@ class _DigitalPetAppState extends State<_DigitalPetApp> {
 			return "Happy😊";
 		}
 	}
+	void _setName() {
+		setState(() {
+			isVisible = !isVisible;
+			petName = nameController.text;
+		});
+	// void startTimer() {
+	// 	Timer.periodic(const Duration(seconds: 5), incHunger),
+		
+	// }
+	}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,38 +93,66 @@ class _DigitalPetAppState extends State<_DigitalPetApp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              petName,
-              style: TextStyle(
-								fontSize: 20.0,
-								color: _determineColor()
+						if (isVisible == false & notDone)
+						Column(
+							children: <Widget> [
+								Text (
+								"Enter your pet name."
 								),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'Happiness Level: $happinessLevel',
-              style: TextStyle(fontSize: 20.0),
-            ),
-						SizedBox(height: 16.0),
-						Text(
-							'Mood: ${_determineMood()}', 
-							style: TextStyle(fontSize: 20.0),
+								TextField(
+									controller: nameController,
+									decoration: InputDecoration(
+										border: OutlineInputBorder(),
+										hintText: "Name"
+									),
+								),
+							]
 						),
-            SizedBox(height: 16.0),
-            Text(
-              'Hunger Level: $hungerLevel',
-              style: TextStyle(fontSize: 20.0),
-            ),
-            SizedBox(height: 32.0),
-            ElevatedButton(
-              onPressed: _playWithPet,
-              child: Text('Play with Your Pet'),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _feedPet,
-              child: Text('Feed Your Pet'),
-            ),
+						SizedBox(height: 16.0,),
+						ElevatedButton(
+							onPressed: _setName, 
+							child: Text("Change Name")
+						),
+						SizedBox(height: 16.0,),
+						if (isVisible & notDone)
+						Column(
+							children: <Widget> [
+								Text(
+								petName,
+								style: TextStyle(
+									fontSize: 20.0,
+									color: _determineColor()
+									),
+								),
+								SizedBox(height: 16.0),
+								Text(
+									'Happiness Level: $happinessLevel',
+									style: TextStyle(fontSize: 20.0),
+								),
+								SizedBox(height: 16.0),
+								Text(
+									'Mood: ${_determineMood()}', 
+									style: TextStyle(fontSize: 20.0),
+								),
+								SizedBox(height: 16.0),
+								Text(
+									'Hunger Level: $hungerLevel',
+									style: TextStyle(fontSize: 20.0),
+								),
+								SizedBox(height: 32.0),
+								ElevatedButton(
+									onPressed: _playWithPet,
+									child: Text('Play with Your Pet'),
+								),
+								SizedBox(height: 16.0),
+								ElevatedButton(
+									onPressed: _feedPet,
+									child: Text('Feed Your Pet'),
+								),
+								SizedBox(height: 16.0,),
+								Text("Timer: $timerCount")
+							]
+						)
           ],
         ),
       ),
